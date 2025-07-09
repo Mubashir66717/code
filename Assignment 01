@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+const int MAX_COMMITTEES = 12; // Define a maximum number of committees
+
+int main() {
+    cout << "====================================\n";
+    cout << "  Welcome to the Committee Program \n";
+    cout << "====================================\n";
+
+    int totalCommittees;
+    cout << "Enter the total number of committees (up to " << MAX_COMMITTEES << "): ";
+    cin >> totalCommittees;
+
+    // Validate total committees input
+    if (totalCommittees < 1 || totalCommittees > MAX_COMMITTEES) {
+        cout << "Invalid number of committees! Please enter a number between 1 and " << MAX_COMMITTEES << ".\n";
+        return 0;
+    }
+
+    string members[MAX_COMMITTEES]; // Array to store committee members
+    string prize;
+
+    // Input prize for all committee members
+    cout << "Enter the prize for all committee members: ";
+    cin >> prize;
+
+    // Input committee member names
+    for (int i = 0; i < totalCommittees; ++i) {
+        cout << "Enter name of Committee Member " << (i + 1) << ": ";
+        cin >> members[i]; // Add member to the list
+    }
+
+    int startMonth;
+    cout << "Enter the starting month (1 for January, 12 for December): ";
+    cin >> startMonth;
+
+    // Validate month input
+    if (startMonth < 1 || startMonth > 12) {
+        cout << "Invalid month input! Please enter a number between 1 and 12.\n";
+        return 0;
+    }
+
+    // Calculate last month
+    int lastMonth = (startMonth + totalCommittees - 1) % 12;
+    if (lastMonth == 0) lastMonth = 12;
+
+    cout << "\nThe lucky draw will start in month " << startMonth
+         << " and end in month " << lastMonth << ".\n";
+
+    srand(time(0));
+
+    // Shuffle members to ensure random assignment without repetition
+    for (int i = 0; i < totalCommittees; i++) {
+        int randomIndex = rand() % totalCommittees;
+        // Swap members
+        string temp = members[i];
+        members[i] = members[randomIndex];
+        members[randomIndex] = temp;
+    }
+
+    // Conduct the lucky draws (Each member wins only once)
+    cout << "\nLucky Draw Results:\n";
+    for (int i = 0; i < totalCommittees; ++i) {
+        cout << "Month " << ((startMonth + i - 1) % 12 + 1) << ": " 
+             << members[i] << " wins " << prize << "!\n";
+    }
+    cout << "\nThank you for using the Committee Lucky Draw Program!\n";
+    return 0;
+}
